@@ -28,5 +28,10 @@ module SfFilmLocationApiWrapper
       end
       return @film_locations
     end
+
+    def self.search(string)
+      array = Unirest.get("https://data.sfgov.org/resource/wwmu-gmzc.json?$q=#{string}").body
+      create(array)
+    end
   end
 end
