@@ -2,7 +2,7 @@ require "sf_film_location_api_wrapper/version"
 require "unirest"
 
 module SfFilmLocationApiWrapper
-  class Film_Location
+  class FilmLocation
     attr_reader :title, :release_year, :locations, :fun_facts, :production_company, :distributor, :director, :writer
 
     def intialize(hash)
@@ -17,14 +17,22 @@ module SfFilmLocationApiWrapper
     end
 
     def self.all
-      film_location_array = Unirest.get("https://data.sfgov.org/resource/wwmu-gmzc.json").body
-      create_film_locations(film_location_array)
+      array = Unirest.get("https://data.sfgov.org/resource/wwmu-gmzc.json").body
+      # create(array)
+      @film_locations = []
+      array.each do |hash|
+        @film_locations << FilmLocation.new(hash)
+      end
+      return @film_locations
     end
 
-    def self.create_film_locations(array)
-      array.each do |film_location_api|
-        FilmLocation.new(film_location_api)
+    def self.create(array)
+      @film_locations = []
+      array.each do |hash|
+        p hash
+        @film_locations << FilmLocation.new(hash)
       end
+      return @film_locations
     end
   end
 end
